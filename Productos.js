@@ -24,4 +24,29 @@ export default class Productos {
     producto["id"] = this.id;
     this.lista.push(producto);
   }
+
+  borrar(id) {
+    let result;
+    this.lista.forEach((value, index) => {
+      if (value.id == id) {
+        result = value;
+        this.lista.splice(index, 1);
+        return result;
+      }
+    });
+    return result;
+  }
+
+  actualizar(producto, id) {
+    let result;
+    this.lista.forEach((value, index) => {
+      if (value.id == id) {
+        producto["id"] = id;
+        result = producto;
+        this.lista[index] = result;
+        return result;
+      }
+    });
+    return result;
+  }
 }
