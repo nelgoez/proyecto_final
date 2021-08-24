@@ -1,17 +1,18 @@
-import express, { response } from "express";
+import express from "express";
 import path from "path";
+import handlebars from "express-handlebars";
 import Producto from "./Producto.js";
 import Productos from "./Productos.js";
 
 const app = express();
-const port = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8080;
 const __dirname = path.resolve();
 
 const router = express.Router();
 
 const productos = new Productos();
 
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(`${__dirname}/public`));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/api", router);
@@ -26,8 +27,37 @@ app.use("/api", router);
 //   next();
 // });
 
+app.set("view engine", "hbs");
+
+app.engine(
+  "hbs",
+  handlebars({
+    layoutsDir: `${__dirname}/views/layouts`,
+    extname: "hbs",
+    defaultLayout: "index",
+    partialsDir: `${__dirname}/views/partials`,
+  })
+);
+
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
+  res.render("main", { layout: "index" });
+});
+
+app.get("/productos/vista", (req, res) => {
+  let result = productos.listar();
+  if (result.length !== 0) {
+    res.render("main", {
+      layout: "productos",
+      list: result,
+      listExist: true,
+    });
+  } else {
+    res.render("main", {
+      layout: "productos",
+      error: "No hay productos cargados",
+      listExist: false,
+    });
+  }
 });
 
 router.get("/productos/listar", (req, res) => {
@@ -51,7 +81,8 @@ router.post("/productos/guardar", (req, res) => {
     req.body.thumbnail
   );
   productos.guardar(producto);
-  res.json(producto);
+  // res.json(producto);
+  res.redirect("/");
 });
 
 router.put("/productos/actualizar/:id", (req, res) => {
@@ -73,10 +104,10 @@ router.delete("/productos/borrar/:id", (req, res) => {
   );
 });
 
-const server = app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
-});
+app.listen(PORT, (error) => {
+  if (error) {
+    throw new Error(`Server Error: ${error}`);
+  }
 
-server.on("error", (error) => {
-  console.error(`Server Error: ${error}`);
+  console.log(`Server listening on port ${PORT}`);
 });

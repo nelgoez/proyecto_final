@@ -21,8 +21,7 @@ export default class Productos {
 
   guardar(producto) {
     this.id++;
-    producto["id"] = this.id;
-    this.lista.push(producto);
+    this.lista.push({ ...producto, id: this.id });
   }
 
   borrar(id) {
@@ -41,8 +40,7 @@ export default class Productos {
     let result;
     this.lista.forEach((value, index) => {
       if (value.id == id) {
-        producto["id"] = id;
-        result = producto;
+        result = { ...producto, id: id };
         this.lista[index] = result;
         return result;
       }
