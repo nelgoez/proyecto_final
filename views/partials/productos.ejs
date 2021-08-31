@@ -5,8 +5,8 @@
         <th>Foto</th>
     </thead>
     <tbody>
-        {{#each list }}
-            {{> producto }}
-        {{/each }}
+        <% list.forEach(function(value) { %>
+            <%- include("./producto", {value: value}) %>
+        <% }); %> 
     </tbody>
 </table>

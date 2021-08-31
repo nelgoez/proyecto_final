@@ -17,9 +17,9 @@ app.use(express.json());
 
 app.use("/api", router);
 
-app.set("views", `${__dirname}/views`);
+// app.set("views", `${__dirname}/views`);
 
-app.set("view engine", "pug");
+app.set("view engine", "ejs");
 
 app.get("/productos/vista", (req, res) => {
   let result = productos.listar();
@@ -57,7 +57,6 @@ router.post("/productos/guardar", (req, res) => {
     req.body.thumbnail
   );
   productos.guardar(producto);
-  // res.json(producto);
   res.redirect("/");
 });
 
