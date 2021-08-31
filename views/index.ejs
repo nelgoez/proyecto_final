@@ -10,8 +10,7 @@
     <h1>Productos Cargados:</h1>
     <% if (listExist) { %>
         <%- include("./partials/productos", {list: list}) %>
-    <% } %>
-    <% if (!listExist) { %>
+    <% } else { %>
         <%- include("./partials/error") %>
     <% } %>
 </body>
