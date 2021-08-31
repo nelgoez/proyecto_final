@@ -1,6 +1,5 @@
 import express from "express";
 import path from "path";
-import handlebars from "express-handlebars";
 import Producto from "./Producto.js";
 import Productos from "./Productos.js";
 
@@ -15,45 +14,22 @@ const productos = new Productos();
 app.use(express.static(`${__dirname}/public`));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 app.use("/api", router);
-// Error Middleware
-// app.use((error, req, res, next) => {
-//   console.error(error.stack);
-//   response.status(500).send("ERROR!");
-// });
-// Router Middleware
-// router.use((req, res, next) => {
-//   console.log("Time:", Date.now());
-//   next();
-// });
 
-app.set("view engine", "hbs");
+app.set("views", `${__dirname}/views`);
 
-app.engine(
-  "hbs",
-  handlebars({
-    layoutsDir: `${__dirname}/views/layouts`,
-    extname: "hbs",
-    defaultLayout: "index",
-    partialsDir: `${__dirname}/views/partials`,
-  })
-);
-
-app.get("/", (req, res) => {
-  res.render("main", { layout: "index" });
-});
+app.set("view engine", "pug");
 
 app.get("/productos/vista", (req, res) => {
   let result = productos.listar();
   if (result.length !== 0) {
-    res.render("main", {
-      layout: "productos",
+    res.render("index", {
       list: result,
       listExist: true,
     });
   } else {
-    res.render("main", {
-      layout: "productos",
+    res.render("index", {
       error: "No hay productos cargados",
       listExist: false,
     });
