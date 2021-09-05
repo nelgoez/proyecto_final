@@ -15,17 +15,8 @@ const productos = new Productos();
 app.use(express.static(`${__dirname}/public`));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 app.use("/api", router);
-// Error Middleware
-// app.use((error, req, res, next) => {
-//   console.error(error.stack);
-//   response.status(500).send("ERROR!");
-// });
-// Router Middleware
-// router.use((req, res, next) => {
-//   console.log("Time:", Date.now());
-//   next();
-// });
 
 app.set("view engine", "hbs");
 
@@ -81,7 +72,6 @@ router.post("/productos/guardar", (req, res) => {
     req.body.thumbnail
   );
   productos.guardar(producto);
-  // res.json(producto);
   res.redirect("/");
 });
 
