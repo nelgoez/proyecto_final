@@ -31,6 +31,30 @@ app.engine(
   })
 );
 
+const server = app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
+});
+
+server.on("error", (error) => {
+  console.log(`Server Error: ${error}`);
+});
+
+// SOCKET IO
+const io = new Server(server);
+
+let messages = [
+  { author: "Juan", text: "¡Hola mundo!" },
+  { author: "Pedro", text: "Hola gente!" },
+  { author: "Ana", text: "Todo bien?" },
+];
+
+io.on("connection", (socket) => {
+  console.log("Conexion al Back");
+  socket.emit("productos", productos.listar());
+  // socket.emit("messages", messages);
+});
+// SOCKET IO
+
 app.get("/", (req, res) => {
   res.sendFile("index.html", { root: __dirname });
 });
@@ -73,6 +97,7 @@ router.post("/productos/guardar", (req, res) => {
     req.body.thumbnail
   );
   productos.guardar(producto);
+  io.sockets.emit("productos", productos.listar()); // Informo al resto de usuarios de los cambios
   res.redirect("/");
 });
 
@@ -93,19 +118,4 @@ router.delete("/productos/borrar/:id", (req, res) => {
   res.json(
     typeof result !== "undefined" ? result : { error: "Producto no encontrado" }
   );
-});
-
-const server = app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
-
-server.on("error", (error) => {
-  console.log(`Server Error: ${error}`);
-});
-
-const io = new Server(server);
-
-io.on("connection", (socket) => {
-  console.log("Conexion al Back");
-  io.emit("productos", productos.listar());
 });
