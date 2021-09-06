@@ -41,7 +41,7 @@ server.on("error", (error) => {
 
 // SOCKET IO
 const io = new Server(server);
-
+// TODO chat!!!
 let messages = [
   { author: "Juan", text: "¡Hola mundo!" },
   { author: "Pedro", text: "Hola gente!" },
