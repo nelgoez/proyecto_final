@@ -5,6 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administrador de Productos</title>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js" defer></script>
+    <script src="/socket.io/socket.io.js" defer></script>
+    <script src="/index.js" defer></script>
 </head>
 <body>
     <h1>Administrador de Productos</h1>
@@ -15,5 +18,6 @@
         <label for="thumbnail">Thumbnail: <input id="thumbnail" type="text" name="thumbnail"></label>
         <button type="submit">Agregar</button>
     </form>
+    <div id="productos"></div>
 </body>
 </html>

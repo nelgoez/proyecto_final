@@ -1,16 +1,17 @@
 import express from "express";
 import path from "path";
 import handlebars from "express-handlebars";
+import { Server } from "socket.io";
 import Producto from "./Producto.js";
 import Productos from "./Productos.js";
+
+const productos = new Productos();
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 const __dirname = path.resolve();
 
 const router = express.Router();
-
-const productos = new Productos();
 
 app.use(express.static(`${__dirname}/public`));
 app.use(express.urlencoded({ extended: true }));
@@ -31,7 +32,7 @@ app.engine(
 );
 
 app.get("/", (req, res) => {
-  res.render("main", { layout: "index" });
+  res.sendFile("index.html", { root: __dirname });
 });
 
 app.get("/productos/vista", (req, res) => {
@@ -94,10 +95,17 @@ router.delete("/productos/borrar/:id", (req, res) => {
   );
 });
 
-app.listen(PORT, (error) => {
-  if (error) {
-    throw new Error(`Server Error: ${error}`);
-  }
-
+const server = app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
+});
+
+server.on("error", (error) => {
+  console.log(`Server Error: ${error}`);
+});
+
+const io = new Server(server);
+
+io.on("connection", (socket) => {
+  console.log("Conexion al Back");
+  io.emit("productos", productos.listar());
 });
