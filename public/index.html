@@ -20,10 +20,11 @@
     </form>
     <div id="productos"></div>
     <h1>Centro de Mensajes</h1>
-    <input id="email" type="email">
-    <hr>
     <div id="chat"></div>
-    <input type="text">
-    <button>Enviar!</button>
+    <form onsubmit="return addMessage()">
+        <input type="email" id="email" required>
+        <input type="text" id="text" required>
+        <button id="send" type="submit">Enviar!</button>
+    </form>
 </body>
 </html>

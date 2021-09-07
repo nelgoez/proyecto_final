@@ -4,6 +4,7 @@ import handlebars from "express-handlebars";
 import { Server } from "socket.io";
 import Producto from "./Producto.js";
 import Productos from "./Productos.js";
+import Archivo from "./Archivo.js";
 
 const productos = new Productos();
 
@@ -41,17 +42,20 @@ server.on("error", (error) => {
 
 // SOCKET IO
 const io = new Server(server);
-// TODO chat!!!
-let messages = [
-  { author: "Juan", text: "¡Hola mundo!" },
-  { author: "Pedro", text: "Hola gente!" },
-  { author: "Ana", text: "Todo bien?" },
-];
 
-io.on("connection", (socket) => {
+const file = new Archivo(`${__dirname}/mensajes.txt`);
+
+io.on("connection", async (socket) => {
   console.log("Conexion al Back");
+
   socket.emit("productos", productos.listar());
-  // socket.emit("messages", messages);
+
+  socket.emit("messages", await file.leer());
+
+  socket.on("new_message", async (data) => {
+    await file.guardar(data);
+    io.sockets.emit("messages", await file.leer());
+  });
 });
 // SOCKET IO
 

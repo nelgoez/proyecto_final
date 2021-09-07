@@ -32,3 +32,23 @@ socket.on("productos", (data) => {
   const html = hbsTemplate({ list: data });
   document.getElementById("productos").innerHTML = html;
 });
+
+socket.on("messages", (data) => {
+  document.getElementById("chat").innerHTML = data.map(
+    (entry) => `<div>
+                    <span style="font-weight: bold; color: blue;">${entry.author}</span>
+                    <span style="color: brown;">${entry.text}</span>
+                    <span style="font-style: italic; color: green;">${entry.fecha}</span>
+                </div>`
+  ).join("");
+});
+
+function addMessage() {
+    const message = {
+        author: document.getElementById("email").value,
+        text: document.getElementById("text").value,
+    }
+    socket.emit("new_message", message);
+    document.getElementById("text").value = ""; 
+    return false;
+}
