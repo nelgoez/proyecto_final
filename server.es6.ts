@@ -13,13 +13,15 @@ const PORT = process.env.PORT || 8080;
 const __dirname = path.resolve();
 
 const router = express.Router();
+
+app.use(express.static(`${__dirname}/public`));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 app.use("/api", router);
 
-// Metodo incorporado en express para reconocer el objeto de solicitud entrante como cadenas o matrices.
-app.use(express.urlencoded({ extended: true }));
-// Metodo incorporado en express para reconocer el objeto de solicitud entrante como un objeto JSON.
-app.use(express.json());
-// Configuracion de Handlebars.
+app.set("view engine", "hbs");
+
 app.engine(
   "hbs",
   handlebars({
@@ -29,10 +31,6 @@ app.engine(
     partialsDir: `${__dirname}/views/partials`,
   })
 );
-// Set del motor de plantillas a utilizar.
-app.set("view engine", "hbs");
-// Set espacio público del servidor.
-app.use(express.static(`${__dirname}/public`));
 
 const server = app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
@@ -114,6 +112,7 @@ router.put("/productos/actualizar/:id", (req: any, res: any) => {
     req.body.thumbnail
   );
   let result = productos.actualizar(producto, req.params.id);
+  io.sockets.emit("productos", productos.listar()); // Informo al resto de usuarios de los cambios
   res.json(
     typeof result !== "undefined" ? result : { error: "Producto no encontrado" }
   );
@@ -121,6 +120,7 @@ router.put("/productos/actualizar/:id", (req: any, res: any) => {
 
 router.delete("/productos/borrar/:id", (req: any, res: any) => {
   let result = productos.borrar(req.params.id);
+  io.sockets.emit("productos", productos.listar()); // Informo al resto de usuarios de los cambios
   res.json(
     typeof result !== "undefined" ? result : { error: "Producto no encontrado" }
   );

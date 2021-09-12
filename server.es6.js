@@ -47,26 +47,21 @@ var Producto_js_1 = __importDefault(require("./Producto.js"));
 var Productos_js_1 = __importDefault(require("./Productos.js"));
 var Archivo_js_1 = __importDefault(require("./Archivo.js"));
 var productos = new Productos_js_1.default();
-var app = express_1.default();
+var app = (0, express_1.default)();
 var PORT = process.env.PORT || 8080;
 var __dirname = path_1.default.resolve();
 var router = express_1.default.Router();
-app.use("/api", router);
-// Metodo incorporado en express para reconocer el objeto de solicitud entrante como cadenas o matrices.
+app.use(express_1.default.static(__dirname + "/public"));
 app.use(express_1.default.urlencoded({ extended: true }));
-// Metodo incorporado en express para reconocer el objeto de solicitud entrante como un objeto JSON.
 app.use(express_1.default.json());
-// Configuracion de Handlebars.
-app.engine("hbs", express_handlebars_1.default({
+app.use("/api", router);
+app.set("view engine", "hbs");
+app.engine("hbs", (0, express_handlebars_1.default)({
     layoutsDir: __dirname + "/views/layouts",
     extname: "hbs",
     defaultLayout: "index",
     partialsDir: __dirname + "/views/partials",
 }));
-// Set del motor de plantillas a utilizar.
-app.set("view engine", "hbs");
-// Set espacio público del servidor.
-app.use(express_1.default.static(__dirname + "/public"));
 var server = app.listen(PORT, function () {
     console.log("Server listening on port " + PORT);
 });
@@ -146,9 +141,11 @@ router.post("/productos/guardar", function (req, res) {
 router.put("/productos/actualizar/:id", function (req, res) {
     var producto = new Producto_js_1.default(req.body.title, req.body.price, req.body.thumbnail);
     var result = productos.actualizar(producto, req.params.id);
+    io.sockets.emit("productos", productos.listar()); // Informo al resto de usuarios de los cambios
     res.json(typeof result !== "undefined" ? result : { error: "Producto no encontrado" });
 });
 router.delete("/productos/borrar/:id", function (req, res) {
     var result = productos.borrar(req.params.id);
+    io.sockets.emit("productos", productos.listar()); // Informo al resto de usuarios de los cambios
     res.json(typeof result !== "undefined" ? result : { error: "Producto no encontrado" });
 });
