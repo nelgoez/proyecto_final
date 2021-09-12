@@ -1,50 +1,54 @@
-export default class Productos {
-  constructor() {
-    this.id = 0;
-    this.lista = [];
-  }
-
-  listar() {
-    return this.lista;
-  }
-
-  listarById(id) {
-    let result;
-    for (let element of this.lista) {
-      if (element.id == id) {
-        result = element;
-        break;
-      }
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Productos = /** @class */ (function () {
+    function Productos() {
+        this.id = 0;
+        this.lista = [];
     }
-    return result;
-  }
-
-  guardar(producto) {
-    this.id++;
-    this.lista.push({ ...producto, id: this.id });
-  }
-
-  borrar(id) {
-    let result;
-    this.lista.forEach((value, index) => {
-      if (value.id == id) {
-        result = value;
-        this.lista.splice(index, 1);
+    Productos.prototype.listar = function () {
+        return this.lista;
+    };
+    Productos.prototype.listarById = function (id) {
+        var result = undefined;
+        for (var _i = 0, _a = this.lista; _i < _a.length; _i++) {
+            var element = _a[_i];
+            if (element.getId() == id) {
+                result = element;
+                break;
+            }
+        }
         return result;
-      }
-    });
-    return result;
-  }
-
-  actualizar(producto, id) {
-    let result;
-    this.lista.forEach((value, index) => {
-      if (value.id == id) {
-        result = { ...producto, id: id };
-        this.lista[index] = result;
+    };
+    Productos.prototype.guardar = function (producto) {
+        this.id++;
+        producto.setId(this.id);
+        this.lista.push(producto);
+    };
+    Productos.prototype.borrar = function (id) {
+        var _this = this;
+        var result = undefined;
+        this.lista.forEach(function (value, index) {
+            if (value.getId() == id) {
+                result = value;
+                _this.lista.splice(index, 1);
+                return result;
+            }
+        });
         return result;
-      }
-    });
-    return result;
-  }
-}
+    };
+    Productos.prototype.actualizar = function (producto, id) {
+        var _this = this;
+        var result = undefined;
+        producto.setId(id);
+        this.lista.forEach(function (value, index) {
+            if (value.getId() == id) {
+                result = producto;
+                _this.lista[index] = result;
+                return result;
+            }
+        });
+        return result;
+    };
+    return Productos;
+}());
+exports.default = Productos;
