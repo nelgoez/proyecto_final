@@ -13,15 +13,13 @@ const PORT = process.env.PORT || 8080;
 const __dirname = path.resolve();
 
 const router = express.Router();
-
-app.use(express.static(`${__dirname}/public`));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
 app.use("/api", router);
 
-app.set("view engine", "hbs");
-
+// Metodo incorporado en express para reconocer el objeto de solicitud entrante como cadenas o matrices.
+app.use(express.urlencoded({ extended: true }));
+// Metodo incorporado en express para reconocer el objeto de solicitud entrante como un objeto JSON.
+app.use(express.json());
+// Configuracion de Handlebars.
 app.engine(
   "hbs",
   handlebars({
@@ -31,6 +29,10 @@ app.engine(
     partialsDir: `${__dirname}/views/partials`,
   })
 );
+// Set del motor de plantillas a utilizar.
+app.set("view engine", "hbs");
+// Set espacio público del servidor.
+app.use(express.static(`${__dirname}/public`));
 
 const server = app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
