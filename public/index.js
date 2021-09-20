@@ -47,6 +47,7 @@ function addMessage() {
     const message = {
         author: document.getElementById("email").value,
         text: document.getElementById("text").value,
+        fecha: new Date().toLocaleString("es-AR"), // NUEVO
     }
     socket.emit("new_message", message);
     document.getElementById("text").value = ""; 

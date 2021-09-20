@@ -9,11 +9,11 @@ export default class Productos {
     this.lista = [];
   }
 
-  listar() {
+  public listar() {
     return this.lista;
   }
 
-  listarById(id: number) {
+  public listarById(id: number) {
     let result = undefined;
     for (let element of this.lista) {
       if (element.getId() == id) {
@@ -24,13 +24,13 @@ export default class Productos {
     return result;
   }
 
-  guardar(producto: Producto) {
+  public guardar(producto: Producto) {
     this.id++;
     producto.setId(this.id);
     this.lista.push(producto);
   }
 
-  borrar(id: number) {
+  public borrar(id: number) {
     let result = undefined;
     this.lista.forEach((value, index) => {
       if (value.getId() == id) {
@@ -42,7 +42,7 @@ export default class Productos {
     return result;
   }
 
-  actualizar(producto: Producto, id: number) {
+  public actualizar(producto: Producto, id: number) {
     let result = undefined;
     producto.setId(id);
     this.lista.forEach((value, index) => {
