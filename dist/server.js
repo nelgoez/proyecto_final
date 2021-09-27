@@ -43,13 +43,11 @@ var express_1 = __importDefault(require("express"));
 var path_1 = __importDefault(require("path"));
 var express_handlebars_1 = __importDefault(require("express-handlebars"));
 var socket_io_1 = require("socket.io");
-var Producto_1 = __importDefault(require("./src/Producto"));
 var DB_Productos_1 = require("./model/DB_Productos");
 var DB_Mensajes_1 = require("./model/DB_Mensajes");
 var app = (0, express_1.default)();
 var __dirname = path_1.default.resolve();
 var PORT = process.env.PORT || 8080;
-// const file = new Archivo(`${__dirname}/mensajes.txt`);
 var router = express_1.default.Router();
 app.use(express_1.default.static(__dirname + "/public"));
 app.use(express_1.default.urlencoded({ extended: true }));
@@ -93,27 +91,24 @@ io.on("connection", function (socket) { return __awaiter(void 0, void 0, void 0,
                 _c = ["productos"];
                 return [4 /*yield*/, (0, DB_Productos_1.sql_select)()];
             case 1:
-                _b.apply(_a, _c.concat([_g.sent()])); // productos.listar());
+                _b.apply(_a, _c.concat([_g.sent()]));
                 _e = (_d = socket).emit;
                 _f = ["messages"];
                 return [4 /*yield*/, (0, DB_Mensajes_1.msg_select)()];
             case 2:
-                _e.apply(_d, _f.concat([_g.sent()])); //file.leer());
+                _e.apply(_d, _f.concat([_g.sent()]));
                 socket.on("new_message", function (data) { return __awaiter(void 0, void 0, void 0, function () {
                     var _a, _b, _c;
                     return __generator(this, function (_d) {
                         switch (_d.label) {
-                            case 0: 
-                            // await file.guardar(data);
-                            return [4 /*yield*/, (0, DB_Mensajes_1.msg_insert)(data)];
+                            case 0: return [4 /*yield*/, (0, DB_Mensajes_1.msg_insert)(data)];
                             case 1:
-                                // await file.guardar(data);
                                 _d.sent();
                                 _b = (_a = io.sockets).emit;
                                 _c = ["messages"];
                                 return [4 /*yield*/, (0, DB_Mensajes_1.msg_select)()];
                             case 2:
-                                _b.apply(_a, _c.concat([_d.sent()])); //file.leer());
+                                _b.apply(_a, _c.concat([_d.sent()]));
                                 return [2 /*return*/];
                         }
                     });
@@ -162,11 +157,11 @@ router.get("/listar/:id?", function (req, res) { return __awaiter(void 0, void 0
         switch (_a.label) {
             case 0:
                 result = undefined;
-                id = isValid(req.params.id);
+                id = req.params.id;
                 if (!id) return [3 /*break*/, 2];
-                return [4 /*yield*/, (0, DB_Productos_1.sql_select_id)({ id: id })];
+                return [4 /*yield*/, (0, DB_Productos_1.sql_select_id)(id)];
             case 1:
-                result = _a.sent(); //productos.listarById(id);
+                result = _a.sent();
                 return [2 /*return*/, res
                         .status(200)
                         .json(typeof result !== "undefined"
@@ -174,7 +169,7 @@ router.get("/listar/:id?", function (req, res) { return __awaiter(void 0, void 0
                         : { error: "Producto no encontrado" })];
             case 2: return [4 /*yield*/, (0, DB_Productos_1.sql_select)()];
             case 3:
-                result = _a.sent(); //productos.listar();
+                result = _a.sent();
                 return [2 /*return*/, res
                         .status(200)
                         .json(typeof result !== "undefined"
@@ -188,95 +183,82 @@ router.post("/agregar", function (req, res) { return __awaiter(void 0, void 0, v
     return __generator(this, function (_d) {
         switch (_d.label) {
             case 0:
-                producto = new Producto_1.default(req.body.title, req.body.price, req.body.thumbnail);
-                return [4 /*yield*/, (0, DB_Productos_1.sql_insert)([producto])];
+                producto = {
+                    title: req.body.title,
+                    price: parseInt(req.body.price),
+                    thumbnail: req.body.thumbnail,
+                };
+                return [4 /*yield*/, (0, DB_Productos_1.sql_insert)(producto)];
             case 1:
                 _d.sent();
-                // productos.guardar(producto);
                 _b = (_a = io.sockets).emit;
                 _c = ["productos"];
                 return [4 /*yield*/, (0, DB_Productos_1.sql_select)()];
             case 2:
-                // productos.guardar(producto);
-                _b.apply(_a, _c.concat([_d.sent()])); // productos.listar()); // Informo al resto de usuarios de los cambios
+                _b.apply(_a, _c.concat([_d.sent()]));
                 res.redirect("/");
                 return [2 /*return*/];
         }
     });
 }); });
 router.put("/actualizar/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var producto, id, result, _a, _b, _c;
+    var producto, result, _a, _b, _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
             case 0:
-                producto = new Producto_1.default(req.body.title, req.body.price, req.body.thumbnail);
-                id = isValid(req.params.id);
-                if (!id) return [3 /*break*/, 3];
-                return [4 /*yield*/, (0, DB_Productos_1.sql_update)(producto, { id: id })];
+                producto = {
+                    title: req.body.title,
+                    price: parseInt(req.body.price),
+                    thumbnail: req.body.thumbnail,
+                };
+                return [4 /*yield*/, (0, DB_Productos_1.sql_update)(producto, req.params.id)];
             case 1:
                 result = _d.sent();
                 _b = (_a = io.sockets).emit;
                 _c = ["productos"];
                 return [4 /*yield*/, (0, DB_Productos_1.sql_select)()];
             case 2:
-                _b.apply(_a, _c.concat([_d.sent()])); //productos.listar()); // Informo al resto de usuarios de los cambios
+                _b.apply(_a, _c.concat([_d.sent()]));
                 res
                     .status(200)
                     .json(typeof result !== "undefined"
                     ? result
                     : { error: "Producto no encontrado" });
-                _d.label = 3;
-            case 3: return [2 /*return*/];
+                return [2 /*return*/];
         }
     });
 }); });
 router.delete("/borrar/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, result, _a, _b, _c;
+    var result, _a, _b, _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
-            case 0:
-                id = isValid(req.params.id);
-                if (!id) return [3 /*break*/, 3];
-                return [4 /*yield*/, (0, DB_Productos_1.sql_delete_id)({ id: id })];
+            case 0: return [4 /*yield*/, (0, DB_Productos_1.sql_delete_id)(req.params.id)];
             case 1:
                 result = _d.sent();
                 _b = (_a = io.sockets).emit;
                 _c = ["productos"];
                 return [4 /*yield*/, (0, DB_Productos_1.sql_select)()];
             case 2:
-                _b.apply(_a, _c.concat([_d.sent()])); // productos.listar()); // Informo al resto de usuarios de los cambios
+                _b.apply(_a, _c.concat([_d.sent()]));
                 res
                     .status(200)
                     .json(typeof result !== "undefined"
                     ? result
                     : { error: "Producto no encontrado" });
-                _d.label = 3;
-            case 3: return [2 /*return*/];
+                return [2 /*return*/];
         }
     });
 }); });
-var isValid = function (input) {
-    if (input) {
-        var n = parseInt(input);
-        if (!isNaN(n)) {
-            return n;
-        }
-    }
-    return;
-};
 var DB_INIT = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var msg_test, productos_test;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var msg_test, _i, msg_test_1, msg, productos_test, _a, productos_test_1, producto;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0: 
-            // Creación de las Bases de Datos
-            return [4 /*yield*/, (0, DB_Productos_1.sql_create)()];
+            // Carga inicial de datos dummy
+            return [4 /*yield*/, (0, DB_Mensajes_1.msg_delete)()];
             case 1:
-                // Creación de las Bases de Datos
-                _a.sent();
-                return [4 /*yield*/, (0, DB_Mensajes_1.msg_create)()];
-            case 2:
-                _a.sent();
+                // Carga inicial de datos dummy
+                _b.sent();
                 msg_test = [
                     {
                         author: "Juan@hotmail.com",
@@ -294,30 +276,51 @@ var DB_INIT = function () { return __awaiter(void 0, void 0, void 0, function ()
                         fecha: "19/9/2021 14:49:19",
                     },
                 ];
-                return [4 /*yield*/, (0, DB_Mensajes_1.msg_insert)(msg_test)];
+                _i = 0, msg_test_1 = msg_test;
+                _b.label = 2;
+            case 2:
+                if (!(_i < msg_test_1.length)) return [3 /*break*/, 5];
+                msg = msg_test_1[_i];
+                return [4 /*yield*/, (0, DB_Mensajes_1.msg_insert)(msg)];
             case 3:
-                _a.sent();
+                _b.sent();
+                _b.label = 4;
+            case 4:
+                _i++;
+                return [3 /*break*/, 2];
+            case 5: return [4 /*yield*/, (0, DB_Productos_1.sql_delete)()];
+            case 6:
+                _b.sent();
                 productos_test = [
                     {
                         title: "Globo Terráqueo",
-                        price: "345.67",
+                        price: 345.67,
                         thumbnail: "https://cdn3.iconfinder.com/data/icons/fantasy-and-role-play-game-adventure-quest/512/Item_Bag-256.png",
                     },
                     {
                         title: "Teclado",
-                        price: "12000",
+                        price: 12000,
                         thumbnail: "https://cdn3.iconfinder.com/data/icons/fantasy-and-role-play-game-adventure-quest/512/Item_Bag-256.png",
                     },
                     {
                         title: "Mouse",
-                        price: "9000.99",
+                        price: 9000.99,
                         thumbnail: "https://cdn3.iconfinder.com/data/icons/fantasy-and-role-play-game-adventure-quest/512/Item_Bag-256.png",
                     },
                 ];
-                return [4 /*yield*/, (0, DB_Productos_1.sql_insert)(productos_test)];
-            case 4:
-                _a.sent();
-                return [2 /*return*/];
+                _a = 0, productos_test_1 = productos_test;
+                _b.label = 7;
+            case 7:
+                if (!(_a < productos_test_1.length)) return [3 /*break*/, 10];
+                producto = productos_test_1[_a];
+                return [4 /*yield*/, (0, DB_Productos_1.sql_insert)(producto)];
+            case 8:
+                _b.sent();
+                _b.label = 9;
+            case 9:
+                _a++;
+                return [3 /*break*/, 7];
+            case 10: return [2 /*return*/];
         }
     });
 }); };

@@ -39,178 +39,177 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sql_delete_id = exports.sql_delete = exports.sql_update = exports.sql_insert = exports.sql_select_id = exports.sql_select = exports.sql_create = void 0;
-var knex_1 = __importDefault(require("knex"));
-var MariaDB_1 = require("../MariaDB");
-var DB = (0, knex_1.default)(MariaDB_1.options);
-var tableName = "productos";
-var sql_create = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_1;
+exports.sql_delete_id = exports.sql_delete = exports.sql_update = exports.sql_insert = exports.sql_select_id = exports.sql_select = void 0;
+var mongoose_1 = __importDefault(require("mongoose"));
+var Productos_1 = require("./Productos");
+var sql_select = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var result, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 5, 6, 7]);
-                return [4 /*yield*/, DB.schema.hasTable(tableName)];
+                _a.trys.push([0, 3, 4, 6]);
+                return [4 /*yield*/, mongoose_1.default.connect("mongodb://localhost:27017/ecommerce")];
             case 1:
-                if (!_a.sent()) return [3 /*break*/, 3];
-                return [4 /*yield*/, DB.schema.dropTable(tableName)];
+                _a.sent();
+                console.log("Base de datos conectada");
+                console.log("READ");
+                return [4 /*yield*/, Productos_1.productos.find()];
             case 2:
-                _a.sent();
-                _a.label = 3;
-            case 3: return [4 /*yield*/, DB.schema.createTable(tableName, function (table) {
-                    table.string("title").notNullable();
-                    table.string("price").notNullable();
-                    table.string("thumbnail").notNullable();
-                    table.increments("id");
-                })];
-            case 4:
-                _a.sent();
-                return [3 /*break*/, 7];
-            case 5:
+                result = _a.sent();
+                console.log(result);
+                return [2 /*return*/, result];
+            case 3:
                 error_1 = _a.sent();
                 console.log(error_1);
-                return [3 /*break*/, 7];
-            case 6: return [7 /*endfinally*/];
-            case 7: return [2 /*return*/];
-        }
-    });
-}); };
-exports.sql_create = sql_create;
-var sql_select = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, 3, 4]);
-                return [4 /*yield*/, DB.from(tableName).select("*")];
-            case 1: return [2 /*return*/, _a.sent()];
-            case 2:
-                error_2 = _a.sent();
-                console.log(error_2);
-                return [3 /*break*/, 4];
-            case 3: return [7 /*endfinally*/];
-            case 4: return [2 /*return*/];
+                return [3 /*break*/, 6];
+            case 4: return [4 /*yield*/, mongoose_1.default.disconnect()];
+            case 5:
+                _a.sent();
+                console.log("Base de datos desconectada");
+                return [7 /*endfinally*/];
+            case 6: return [2 /*return*/];
         }
     });
 }); };
 exports.sql_select = sql_select;
-var sql_select_id = function (params) { return __awaiter(void 0, void 0, void 0, function () {
-    var error_3;
+var sql_select_id = function (id) { return __awaiter(void 0, void 0, void 0, function () {
+    var result, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, 3, 4]);
-                return [4 /*yield*/, DB.from(tableName).select("*").where(params)];
-            case 1: return [2 /*return*/, _a.sent()];
+                _a.trys.push([0, 3, 4, 6]);
+                return [4 /*yield*/, mongoose_1.default.connect("mongodb://localhost:27017/ecommerce")];
+            case 1:
+                _a.sent();
+                console.log("Base de datos conectada");
+                console.log("READ");
+                return [4 /*yield*/, Productos_1.productos.find({ _id: id })];
             case 2:
-                error_3 = _a.sent();
-                console.log(error_3);
-                return [3 /*break*/, 4];
-            case 3: return [7 /*endfinally*/];
-            case 4: return [2 /*return*/];
+                result = _a.sent();
+                console.log(result);
+                return [2 /*return*/, result];
+            case 3:
+                error_2 = _a.sent();
+                console.log(error_2);
+                return [3 /*break*/, 6];
+            case 4: return [4 /*yield*/, mongoose_1.default.disconnect()];
+            case 5:
+                _a.sent();
+                console.log("Base de datos desconectada");
+                return [7 /*endfinally*/];
+            case 6: return [2 /*return*/];
         }
     });
 }); };
 exports.sql_select_id = sql_select_id;
 var sql_insert = function (data) { return __awaiter(void 0, void 0, void 0, function () {
-    var error_4;
+    var productoModel, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, 3, 4]);
-                return [4 /*yield*/, DB.from(tableName).insert(data)];
+                _a.trys.push([0, 3, 4, 6]);
+                return [4 /*yield*/, mongoose_1.default.connect("mongodb://localhost:27017/ecommerce")];
             case 1:
                 _a.sent();
-                return [3 /*break*/, 4];
+                console.log("Base de datos conectada");
+                productoModel = new Productos_1.productos(data);
+                console.log("CREATE");
+                return [4 /*yield*/, productoModel.save()];
             case 2:
-                error_4 = _a.sent();
-                console.log(error_4);
-                return [3 /*break*/, 4];
-            case 3: return [7 /*endfinally*/];
-            case 4: return [2 /*return*/];
+                _a.sent();
+                return [3 /*break*/, 6];
+            case 3:
+                error_3 = _a.sent();
+                console.log(error_3);
+                return [3 /*break*/, 6];
+            case 4: return [4 /*yield*/, mongoose_1.default.disconnect()];
+            case 5:
+                _a.sent();
+                console.log("Base de datos desconectada");
+                return [7 /*endfinally*/];
+            case 6: return [2 /*return*/];
         }
     });
 }); };
 exports.sql_insert = sql_insert;
-var sql_update = function (data, params) { return __awaiter(void 0, void 0, void 0, function () {
-    var error_5;
+var sql_update = function (data, id) { return __awaiter(void 0, void 0, void 0, function () {
+    var error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, 3, 4]);
-                return [4 /*yield*/, DB.from(tableName).where(params).update(data)];
+                _a.trys.push([0, 3, 4, 6]);
+                return [4 /*yield*/, mongoose_1.default.connect("mongodb://localhost:27017/ecommerce")];
             case 1:
                 _a.sent();
-                return [3 /*break*/, 4];
-            case 2:
-                error_5 = _a.sent();
-                console.log(error_5);
-                return [3 /*break*/, 4];
-            case 3: return [7 /*endfinally*/];
-            case 4: return [2 /*return*/];
+                console.log("Base de datos conectada");
+                console.log("UPDATE");
+                return [4 /*yield*/, Productos_1.productos.findOneAndUpdate({ _id: id }, data)];
+            case 2: return [2 /*return*/, _a.sent()];
+            case 3:
+                error_4 = _a.sent();
+                console.log(error_4);
+                return [3 /*break*/, 6];
+            case 4: return [4 /*yield*/, mongoose_1.default.disconnect()];
+            case 5:
+                _a.sent();
+                console.log("Base de datos desconectada");
+                return [7 /*endfinally*/];
+            case 6: return [2 /*return*/];
         }
     });
 }); };
 exports.sql_update = sql_update;
-var sql_delete_id = function (params) { return __awaiter(void 0, void 0, void 0, function () {
-    var error_6;
+var sql_delete_id = function (id) { return __awaiter(void 0, void 0, void 0, function () {
+    var error_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, 3, 4]);
-                return [4 /*yield*/, DB.from(tableName).where(params).del()];
+                _a.trys.push([0, 3, 4, 6]);
+                return [4 /*yield*/, mongoose_1.default.connect("mongodb://localhost:27017/ecommerce")];
             case 1:
                 _a.sent();
-                return [3 /*break*/, 4];
-            case 2:
-                error_6 = _a.sent();
-                console.log(error_6);
-                return [3 /*break*/, 4];
-            case 3: return [7 /*endfinally*/];
-            case 4: return [2 /*return*/];
+                console.log("Base de datos conectada");
+                console.log("DELETE");
+                return [4 /*yield*/, Productos_1.productos.deleteOne({ _id: id })];
+            case 2: return [2 /*return*/, _a.sent()];
+            case 3:
+                error_5 = _a.sent();
+                console.log(error_5);
+                return [3 /*break*/, 6];
+            case 4: return [4 /*yield*/, mongoose_1.default.disconnect()];
+            case 5:
+                _a.sent();
+                console.log("Base de datos desconectada");
+                return [7 /*endfinally*/];
+            case 6: return [2 /*return*/];
         }
     });
 }); };
 exports.sql_delete_id = sql_delete_id;
 var sql_delete = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_7;
+    var error_6;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, 3, 4]);
-                return [4 /*yield*/, DB.from(tableName).del()];
+                _a.trys.push([0, 3, 4, 6]);
+                return [4 /*yield*/, mongoose_1.default.connect("mongodb://localhost:27017/ecommerce")];
             case 1:
                 _a.sent();
-                return [3 /*break*/, 4];
-            case 2:
-                error_7 = _a.sent();
-                console.log(error_7);
-                return [3 /*break*/, 4];
-            case 3: return [7 /*endfinally*/];
-            case 4: return [2 /*return*/];
+                console.log("Base de datos conectada");
+                console.log("DELETE");
+                return [4 /*yield*/, Productos_1.productos.deleteMany()];
+            case 2: return [2 /*return*/, _a.sent()];
+            case 3:
+                error_6 = _a.sent();
+                console.log(error_6);
+                return [3 /*break*/, 6];
+            case 4: return [4 /*yield*/, mongoose_1.default.disconnect()];
+            case 5:
+                _a.sent();
+                console.log("Base de datos desconectada");
+                return [7 /*endfinally*/];
+            case 6: return [2 /*return*/];
         }
     });
 }); };
 exports.sql_delete = sql_delete;
-var test = [
-    {
-        title: "Globo Terráqueo",
-        price: "345.67",
-        thumbnail: "https://cdn3.iconfinder.com/data/icons/fantasy-and-role-play-game-adventure-quest/512/Item_Bag-256.png",
-    },
-    {
-        title: "Teclado",
-        price: "12000",
-        thumbnail: "https://cdn3.iconfinder.com/data/icons/fantasy-and-role-play-game-adventure-quest/512/Item_Bag-256.png",
-    },
-    {
-        title: "Mouse",
-        price: "9000.99",
-        thumbnail: "https://cdn3.iconfinder.com/data/icons/fantasy-and-role-play-game-adventure-quest/512/Item_Bag-256.png",
-    },
-];
-var test2 = {
-    title: "Prueba de Producto 2",
-    price: "121.12",
-    thumbnail: "una foto 2",
-};
