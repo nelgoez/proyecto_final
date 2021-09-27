@@ -43,7 +43,7 @@ exports.sql_delete_id = exports.sql_delete = exports.sql_update = exports.sql_in
 var mongoose_1 = __importDefault(require("mongoose"));
 var Productos_1 = require("./Productos");
 var sql_select = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var result, error_1;
+    var error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -51,13 +51,8 @@ var sql_select = function () { return __awaiter(void 0, void 0, void 0, function
                 return [4 /*yield*/, mongoose_1.default.connect("mongodb://localhost:27017/ecommerce")];
             case 1:
                 _a.sent();
-                console.log("Base de datos conectada");
-                console.log("READ");
                 return [4 /*yield*/, Productos_1.productos.find()];
-            case 2:
-                result = _a.sent();
-                console.log(result);
-                return [2 /*return*/, result];
+            case 2: return [2 /*return*/, _a.sent()];
             case 3:
                 error_1 = _a.sent();
                 console.log(error_1);
@@ -65,7 +60,6 @@ var sql_select = function () { return __awaiter(void 0, void 0, void 0, function
             case 4: return [4 /*yield*/, mongoose_1.default.disconnect()];
             case 5:
                 _a.sent();
-                console.log("Base de datos desconectada");
                 return [7 /*endfinally*/];
             case 6: return [2 /*return*/];
         }
@@ -73,7 +67,7 @@ var sql_select = function () { return __awaiter(void 0, void 0, void 0, function
 }); };
 exports.sql_select = sql_select;
 var sql_select_id = function (id) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, error_2;
+    var error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -81,13 +75,8 @@ var sql_select_id = function (id) { return __awaiter(void 0, void 0, void 0, fun
                 return [4 /*yield*/, mongoose_1.default.connect("mongodb://localhost:27017/ecommerce")];
             case 1:
                 _a.sent();
-                console.log("Base de datos conectada");
-                console.log("READ");
                 return [4 /*yield*/, Productos_1.productos.find({ _id: id })];
-            case 2:
-                result = _a.sent();
-                console.log(result);
-                return [2 /*return*/, result];
+            case 2: return [2 /*return*/, _a.sent()];
             case 3:
                 error_2 = _a.sent();
                 console.log(error_2);
@@ -95,7 +84,6 @@ var sql_select_id = function (id) { return __awaiter(void 0, void 0, void 0, fun
             case 4: return [4 /*yield*/, mongoose_1.default.disconnect()];
             case 5:
                 _a.sent();
-                console.log("Base de datos desconectada");
                 return [7 /*endfinally*/];
             case 6: return [2 /*return*/];
         }
@@ -111,9 +99,7 @@ var sql_insert = function (data) { return __awaiter(void 0, void 0, void 0, func
                 return [4 /*yield*/, mongoose_1.default.connect("mongodb://localhost:27017/ecommerce")];
             case 1:
                 _a.sent();
-                console.log("Base de datos conectada");
                 productoModel = new Productos_1.productos(data);
-                console.log("CREATE");
                 return [4 /*yield*/, productoModel.save()];
             case 2:
                 _a.sent();
@@ -125,7 +111,6 @@ var sql_insert = function (data) { return __awaiter(void 0, void 0, void 0, func
             case 4: return [4 /*yield*/, mongoose_1.default.disconnect()];
             case 5:
                 _a.sent();
-                console.log("Base de datos desconectada");
                 return [7 /*endfinally*/];
             case 6: return [2 /*return*/];
         }
@@ -141,8 +126,6 @@ var sql_update = function (data, id) { return __awaiter(void 0, void 0, void 0, 
                 return [4 /*yield*/, mongoose_1.default.connect("mongodb://localhost:27017/ecommerce")];
             case 1:
                 _a.sent();
-                console.log("Base de datos conectada");
-                console.log("UPDATE");
                 return [4 /*yield*/, Productos_1.productos.findOneAndUpdate({ _id: id }, data)];
             case 2: return [2 /*return*/, _a.sent()];
             case 3:
@@ -152,7 +135,6 @@ var sql_update = function (data, id) { return __awaiter(void 0, void 0, void 0, 
             case 4: return [4 /*yield*/, mongoose_1.default.disconnect()];
             case 5:
                 _a.sent();
-                console.log("Base de datos desconectada");
                 return [7 /*endfinally*/];
             case 6: return [2 /*return*/];
         }
@@ -168,8 +150,6 @@ var sql_delete_id = function (id) { return __awaiter(void 0, void 0, void 0, fun
                 return [4 /*yield*/, mongoose_1.default.connect("mongodb://localhost:27017/ecommerce")];
             case 1:
                 _a.sent();
-                console.log("Base de datos conectada");
-                console.log("DELETE");
                 return [4 /*yield*/, Productos_1.productos.deleteOne({ _id: id })];
             case 2: return [2 /*return*/, _a.sent()];
             case 3:
@@ -179,7 +159,6 @@ var sql_delete_id = function (id) { return __awaiter(void 0, void 0, void 0, fun
             case 4: return [4 /*yield*/, mongoose_1.default.disconnect()];
             case 5:
                 _a.sent();
-                console.log("Base de datos desconectada");
                 return [7 /*endfinally*/];
             case 6: return [2 /*return*/];
         }
@@ -195,8 +174,6 @@ var sql_delete = function () { return __awaiter(void 0, void 0, void 0, function
                 return [4 /*yield*/, mongoose_1.default.connect("mongodb://localhost:27017/ecommerce")];
             case 1:
                 _a.sent();
-                console.log("Base de datos conectada");
-                console.log("DELETE");
                 return [4 /*yield*/, Productos_1.productos.deleteMany()];
             case 2: return [2 /*return*/, _a.sent()];
             case 3:
@@ -206,7 +183,6 @@ var sql_delete = function () { return __awaiter(void 0, void 0, void 0, function
             case 4: return [4 /*yield*/, mongoose_1.default.disconnect()];
             case 5:
                 _a.sent();
-                console.log("Base de datos desconectada");
                 return [7 /*endfinally*/];
             case 6: return [2 /*return*/];
         }
