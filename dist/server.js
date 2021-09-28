@@ -43,12 +43,12 @@ var express_1 = __importDefault(require("express"));
 var path_1 = __importDefault(require("path"));
 var express_handlebars_1 = __importDefault(require("express-handlebars"));
 var socket_io_1 = require("socket.io");
-var DB_Productos_1 = require("./model/DB_Productos");
-var DB_Mensajes_1 = require("./model/DB_Mensajes");
+var DB_Productos_1 = require("./models/DB_Productos");
+var DB_Mensajes_1 = require("./models/DB_Mensajes");
+var Main_1 = __importDefault(require("./routes/Main"));
 var app = (0, express_1.default)();
 var __dirname = path_1.default.resolve();
 var PORT = process.env.PORT || 8080;
-var router = express_1.default.Router();
 app.use(express_1.default.static(__dirname + "/public"));
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
@@ -62,7 +62,7 @@ app.engine("hbs", (0, express_handlebars_1.default)({
     partialsDir: __dirname + "/views/partials",
 }));
 // Routes Setup
-app.use("/productos", router);
+app.use("/productos", Main_1.default);
 var server = app.listen(PORT, function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -86,7 +86,6 @@ io.on("connection", function (socket) { return __awaiter(void 0, void 0, void 0,
         switch (_g.label) {
             case 0:
                 _g.trys.push([0, 3, , 4]);
-                console.log("Conexion al Back");
                 _b = (_a = socket).emit;
                 _c = ["productos"];
                 return [4 /*yield*/, (0, DB_Productos_1.sql_select)()];
@@ -151,7 +150,7 @@ app.get("/productos/vista", function (req, res) { return __awaiter(void 0, void 
         }
     });
 }); });
-router.get("/listar/:id?", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+Main_1.default.get("/listar/:id?", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var result, id;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -178,7 +177,7 @@ router.get("/listar/:id?", function (req, res) { return __awaiter(void 0, void 0
         }
     });
 }); });
-router.post("/agregar", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+Main_1.default.post("/agregar", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var producto, _a, _b, _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
@@ -201,7 +200,7 @@ router.post("/agregar", function (req, res) { return __awaiter(void 0, void 0, v
         }
     });
 }); });
-router.put("/actualizar/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+Main_1.default.put("/actualizar/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var producto, result, _a, _b, _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
@@ -228,7 +227,7 @@ router.put("/actualizar/:id", function (req, res) { return __awaiter(void 0, voi
         }
     });
 }); });
-router.delete("/borrar/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+Main_1.default.delete("/borrar/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var result, _a, _b, _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
